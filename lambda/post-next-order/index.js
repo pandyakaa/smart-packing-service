@@ -12,8 +12,20 @@ exports.handler = (event, context, cb) => {
             "#ps": "processed"
         },
         FilterExpression: "#ps = :false",
-       Limit: 1
+        Limit: 1
    }
+   
+   dynamoDB.delete({
+       TableName: 'live_item',
+       Key: {
+           "station_id": order_station_id
+       }
+   }, (err, data) => {
+       if (err) {
+           console.error(err)
+       }
+   })
+   
     dynamoDB.scan(params, (err, data) => {
         if (err) {
             console.log(err)
@@ -48,7 +60,7 @@ exports.handler = (event, context, cb) => {
                }
                 dynamoDB.update(updateParams, (err, data) => {
                     if (err) {
-                        console.log(err)
+                        console.error(err)
                         cb(err)
                     }
                 })
